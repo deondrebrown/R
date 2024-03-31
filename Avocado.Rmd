@@ -1,0 +1,102 @@
+---
+title: "Avocado Data Statistics"
+author: "Deondre Brown"
+date: "2024-03-30"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+This is a project documenting my statistical steps and analysis regarding a dataset for Avocado sales.
+
+Step 1.Read in the data
+
+```{r}
+avocado <- read.csv("Module2_Avocado_Data.csv")
+```
+
+Step 2. Load in the necessary packages we need
+```{r}
+library(tidyverse)
+library(psych)
+```
+
+Step 3. Use these functions to make the sure data was loaded in properly.
+```{r}
+dim(avocado) # Shows the numbers of rows and columns in the dataset
+```
+
+```{r}
+names(avocado) # Names all the variables in the dataset
+```
+
+```{r}
+view(avocado) # Displays the dataset in a spreadsheet format in another tab
+```
+
+```{r}
+head(avocado, 10) # Prints the first 10 rows of the data
+```
+
+```{r}
+str(avocado) # Get an overview of the variables and their first rows of values
+```
+
+Step 4. Create a new data column to hold dollar sales information. To get the dollar sales information we are going to multiple the average price by the total volume.
+
+```{r}
+avocado$totalsales <- avocado$averageprice*avocado$totalvolume
+```
+
+Step 5. Look at basic summaries of the data.
+```{r}
+summary(avocado) #R built-in function for summary statistics
+```
+
+```{r}
+describe(avocado) #Better than summary() function and gives more statistics
+```
+
+```{r}
+avocado |>
+  select(totalvolume, totalsales) |>
+  describe() # Describes statistics for the total volume and total sales variables
+```
+
+**Using these statistics we can find out the minimum, maximum, and average sales**
+
+Minimum: **563.35**
+Maximum: **40,361,458**
+and Average: **665,447.3**
+
+Step 6. Look at a data distribution using a histogram. For this histogram we can display the frequency regarding the average price of avocados.
+
+```{r}
+hist(avocado$averageprice, 
+     col = "red",
+     xlab = "Average Price",
+     ylab = "Frequency")
+```
+
+**Using this histogram, we can make the observation that the data is positively skewed**
+
+Step 7. We can find the correlation value between average price and sales volume to see how they relate to each other.
+```{r}
+cor(avocado$averageprice,avocado$totalvolume)
+```
+
+**We get a value of -0.31 indicating that the average price and sales volume are inversely related**
+
+Step 8. We can generate many more insights by gathering summary statistics by grouping.
+
+**Get the Summary statistics for price by each supplier**
+```{r}
+describeBy(averageprice ~ supplierid, mat=T, data=avocado) #Mat function transposes the data
+```
+
+**Average price of avocados by month of year?**
+```{r}
+describeBy(averageprice ~ month, mat=T, data=avocado)
+```
+
+
